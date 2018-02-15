@@ -43,7 +43,7 @@
   )
 
   (setup
-    (last_trace_width 0.29972)
+    (last_trace_width 0.15)
     (user_trace_width 0.29972)
     (user_trace_width 0.59944)
     (user_trace_width 0.8001)
@@ -12001,7 +12001,7 @@
     )
   )
 
-  (module kicad-libraries:QFN24-4x4mm-0.5mm (layer Vorderseite) (tedit 590CA070) (tstamp 5A587BC2)
+  (module kicad-libraries:QFN24-4x4mm-0.5mm (layer Vorderseite) (tedit 5A8562EA) (tstamp 5A587BC2)
     (at 52.6 51.5)
     (tags "QFN 24pin 0.5")
     (path /5A588C01)
@@ -12009,7 +12009,7 @@
     (fp_text reference U1 (at 0 -0.4) (layer F.Fab)
       (effects (font (size 0.3 0.3) (thickness 0.075)))
     )
-    (fp_text value XMC1XXX24 (at 0 0.8) (layer F.Fab)
+    (fp_text value XMC1302 (at 0 0.8) (layer F.Fab)
       (effects (font (size 0.3 0.3) (thickness 0.075)))
     )
     (fp_line (start -1 -2) (end 2 -2) (layer F.Fab) (width 0.15))
