@@ -23,8 +23,8 @@
   )
 
   (layers
-    (0 Vorderseite signal)
-    (31 Rückseite signal)
+    (0 Vorderseite signal hide)
+    (31 Rückseite signal hide)
     (32 B.Adhes user)
     (33 F.Adhes user)
     (34 B.Paste user)
@@ -76,7 +76,7 @@
     (pad_to_mask_clearance 0)
     (aux_axis_origin 72.9 27.3)
     (grid_origin 72.9 27.3)
-    (visible_elements FFFFFFBF)
+    (visible_elements FFFFBFBF)
     (pcbplotparams
       (layerselection 0x010fc_80000001)
       (usegerberextensions true)
@@ -6145,11 +6145,11 @@
   )
 
   (module kicad-libraries:CE_5mm (layer Rückseite) (tedit 5922FFD4) (tstamp 5204AA22)
-    (at 57.9 39.3 180)
-    (fp_text reference VAL (at 0 0 180) (layer B.SilkS) hide
+    (at 57.9 39.3)
+    (fp_text reference VAL (at 0 0) (layer B.SilkS) hide
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
-    (fp_text value CE_5mm (at 0 0 180) (layer B.SilkS) hide
+    (fp_text value CE_5mm (at 0 0) (layer B.SilkS) hide
       (effects (font (size 0.2 0.2) (thickness 0.05)) (justify mirror))
     )
     (fp_poly (pts (xy -0.55372 -1.67132) (xy -0.5715 -1.67386) (xy -0.57912 -1.6764) (xy -0.59436 -1.6764)
@@ -12434,13 +12434,13 @@
   (gr_text Input (at 54.2 40.1) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text DAT (at 71.2 47.6) (layer F.SilkS) (tstamp 520376C8)
+  (gr_text Data (at 71.1 47.6) (layer F.SilkS) (tstamp 520376C8)
     (effects (font (size 0.8 0.8) (thickness 0.15)))
   )
   (gr_text - (at 71.2 37.6) (layer F.SilkS) (tstamp 520376B6)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text CLK (at 71.2 42.6) (layer F.SilkS) (tstamp 520376B5)
+  (gr_text Clock (at 70.9 42.6) (layer F.SilkS) (tstamp 520376B5)
     (effects (font (size 0.8 0.8) (thickness 0.15)))
   )
   (gr_text + (at 71.2 32.6) (layer F.SilkS)
