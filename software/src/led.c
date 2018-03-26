@@ -567,4 +567,6 @@ void led_init(void) {
 	XMC_GPIO_Init(LED_MOSI_PIN, &mosi_pin_config);
 
 	led_init_adc();
+
+	led_update_chip_type();
 }
