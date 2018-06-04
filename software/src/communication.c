@@ -67,18 +67,21 @@ BootloaderHandleMessageResponse set_led_values_low_level(const SetLEDValuesLowLe
 }
 
 BootloaderHandleMessageResponse get_led_values_low_level(const GetLEDValuesLowLevel *data, GetLEDValuesLowLevel_Response *response) {
-	if(((data->index + data->length) >= LED_BUFFER_SIZE) || (led.buffer_index_max < led.buffer_copy_get_offset)) {
+	if(((data->index + data->length) >= LED_BUFFER_SIZE) || ((led.buffer_index_max - data->index) < led.buffer_copy_get_offset)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
-
-	uint8_t length = MIN(60, led.buffer_index_max - led.buffer_copy_get_offset);
+led.buffer_copy_get_offset = 0;
+	uint8_t length = MIN(MIN(60, led.buffer_index_max - data->index - led.buffer_copy_get_offset), data->length);
 
 	response->header.length      = sizeof(GetLEDValuesLowLevel_Response);
 	response->value_chunk_offset = led.buffer_copy_get_offset;
 	response->value_length       = led.buffer_index_max;
-	memcpy(response->value_chunk_data, led.buffer_copy + led.buffer_copy_get_offset, length);
-
+	memcpy(response->value_chunk_data, led.buffer_copy + led.buffer_copy_get_offset + data->index, length);
 	led.buffer_copy_get_offset += length;
+
+	if(led.buffer_copy_get_offset >= (led.buffer_index_max - data->index)) {
+		led.buffer_copy_get_offset = 0;
+	}
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
