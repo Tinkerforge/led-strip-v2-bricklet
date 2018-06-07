@@ -70,7 +70,8 @@ BootloaderHandleMessageResponse get_led_values_low_level(const GetLEDValuesLowLe
 	if(((data->index + data->length) >= LED_BUFFER_SIZE) || ((led.buffer_index_max - data->index) < led.buffer_copy_get_offset)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
-led.buffer_copy_get_offset = 0;
+	
+	led.buffer_copy_get_offset = 0;
 	uint8_t length = MIN(MIN(60, led.buffer_index_max - data->index - led.buffer_copy_get_offset), data->length);
 
 	response->header.length      = sizeof(GetLEDValuesLowLevel_Response);
