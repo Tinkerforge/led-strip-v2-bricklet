@@ -56,8 +56,8 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) le
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) led_tx_irq_handler_wo_clock(void) {
 	while(XMC_USIC_CH_TXFIFO_GetLevel(LED_USIC) < 30) {
 		const uint8_t value = led.buffer[led.buffer_index];
-		LED_USIC->IN[0] = ws281x_lut[value] & 0xFFFF;
 		LED_USIC->IN[0] = (ws281x_lut[value] >> 16) & 0xFFFF;
+		LED_USIC->IN[0] = ws281x_lut[value] & 0xFFFF;
 		led.buffer_index++;
 		if(led.buffer_index >= led.buffer_index_max_irq) {
 			led.frame_sending = false;

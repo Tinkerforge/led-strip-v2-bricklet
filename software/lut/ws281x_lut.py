@@ -11,8 +11,8 @@ def pattern(bit):
 values = []
 for i in range(256):
     value = 0
-    for j in reversed(range(8)):
-        value |= pattern((i >> j) & 1) << 4*(7-j)
+    for j in range(8):
+        value |= pattern((i >> j) & 1) << 4*j
     values.append(value)
 
 print('const uint32_t ws281x_lut[256] = {')
