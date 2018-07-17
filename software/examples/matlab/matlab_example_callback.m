@@ -17,14 +17,14 @@ function matlab_example_callback()
     % Set frame duration to 50ms (20 frames per second)
     ls.setFrameDuration(50);
 
-    % Register frame rendered callback to function cb_frame_rendered
-    set(ls, 'FrameRenderedCallback', @(h, e) cb_frame_rendered(e));
+    % Register frame started callback to function cb_frame_started
+    set(ls, 'FrameStartedCallback', @(h, e) cb_frame_started(e));
 
     input('Press key to exit\n', 's');
     ipcon.disconnect();
 end
 
-% Use frame rendered callback to move the active LED every frame
-function cb_frame_rendered(e)
+% Use frame started callback to move the active LED every frame
+function cb_frame_started(e)
     fprintf('Length: %i\n', e.length);
 end

@@ -9,8 +9,8 @@
 #define PORT 4223
 #define UID "XYZ" // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-// Use frame rendered callback to move the active LED every frame
-void cb_frame_rendered(uint16_t length, void *user_data) {
+// Use frame started callback to move the active LED every frame
+void cb_frame_started(uint16_t length, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
 	printf("Length: %u\n", length);
@@ -35,10 +35,10 @@ int main(void) {
 	// Set frame duration to 50ms (20 frames per second)
 	led_strip_v2_set_frame_duration(&ls, 50);
 
-	// Register frame rendered callback to function cb_frame_rendered
+	// Register frame started callback to function cb_frame_started
 	led_strip_v2_register_callback(&ls,
-	                               LED_STRIP_V2_CALLBACK_FRAME_RENDERED,
-	                               (void *)cb_frame_rendered,
+	                               LED_STRIP_V2_CALLBACK_FRAME_STARTED,
+	                               (void *)cb_frame_started,
 	                               NULL);
 
 	printf("Press key to exit\n");

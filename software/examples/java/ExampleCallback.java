@@ -22,9 +22,9 @@ public class ExampleCallback {
 		// Set frame duration to 50ms (20 frames per second)
 		ls.setFrameDuration(50);
 
-		// Use frame rendered callback to move the active LED every frame
-		ls.addFrameRenderedListener(new BrickletLEDStripV2.FrameRenderedListener() {
-			public void frameRendered(int length) {
+		// Use frame started callback to move the active LED every frame
+		ls.addFrameStartedListener(new BrickletLEDStripV2.FrameStartedListener() {
+			public void frameStarted(int length) {
 				System.out.println("Length: " + length);
 			}
 		});

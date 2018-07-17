@@ -15,10 +15,10 @@ ipcon@Connect[host,port]
 (*Set frame duration to 50ms (20 frames per second)*)
 ls@SetFrameDuration[50]
 
-(*Use frame rendered callback to move the active LED every frame*)
-FrameRenderedCB[sender_,length_]:=
+(*Use frame started callback to move the active LED every frame*)
+FrameStartedCB[sender_,length_]:=
  Print["Length: "<>ToString[length]]
-AddEventHandler[ls@FrameRenderedCallback,FrameRenderedCB]
+AddEventHandler[ls@FrameStartedCallback,FrameStartedCB]
 
 Input["Click OK to exit"]
 

@@ -8,8 +8,8 @@ Module ExampleCallback
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-    ' Use frame rendered callback to move the active LED every frame
-    Sub FrameRenderedCB(ByVal sender As BrickletLEDStripV2, ByVal length As Integer)
+    ' Use frame started callback to move the active LED every frame
+    Sub FrameStartedCB(ByVal sender As BrickletLEDStripV2, ByVal length As Integer)
         Console.WriteLine("Length: " + length.ToString())
     End Sub
 
@@ -23,8 +23,8 @@ Module ExampleCallback
         ' Set frame duration to 50ms (20 frames per second)
         ls.SetFrameDuration(50)
 
-        ' Register frame rendered callback to subroutine FrameRenderedCB
-        AddHandler ls.FrameRenderedCallback, AddressOf FrameRenderedCB
+        ' Register frame started callback to subroutine FrameStartedCB
+        AddHandler ls.FrameStartedCallback, AddressOf FrameStartedCB
 
         Console.WriteLine("Press key to exit")
         Console.ReadLine()

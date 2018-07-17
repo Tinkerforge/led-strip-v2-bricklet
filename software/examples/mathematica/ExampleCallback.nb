@@ -25,9 +25,9 @@ Notebook[{
    RowBox[{"ls", "@", RowBox[{"SetFrameDuration", "[", "50", "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Use frame rendered callback to move the active LED every frame", "*)"}],
-   RowBox[{RowBox[{"FrameRenderedCB", "[", RowBox[{"sender_", ",", "length_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Length: \>\"", "<>", RowBox[{"ToString", "[", "length", "]"}]}], "]"}]}],
-   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"ls", "@", "FrameRenderedCallback"}], ",", "FrameRenderedCB"}], "]"}],
+   RowBox[{"(*", "Use frame started callback to move the active LED every frame", "*)"}],
+   RowBox[{RowBox[{"FrameStartedCB", "[", RowBox[{"sender_", ",", "length_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Length: \>\"", "<>", RowBox[{"ToString", "[", "length", "]"}]}], "]"}]}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"ls", "@", "FrameStartedCallback"}], ",", "FrameStartedCB"}], "]"}],
    RowBox[{"
 "}],
    RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}],

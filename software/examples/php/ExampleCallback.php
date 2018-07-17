@@ -12,8 +12,8 @@ const HOST = 'localhost';
 const PORT = 4223;
 const UID = 'XYZ'; // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-// Use frame rendered callback to move the active LED every frame
-function cb_frameRendered($length)
+// Use frame started callback to move the active LED every frame
+function cb_frameStarted($length)
 {
     echo "Length: $length\n";
 }
@@ -27,8 +27,8 @@ $ipcon->connect(HOST, PORT); // Connect to brickd
 // Set frame duration to 50ms (20 frames per second)
 $ls->setFrameDuration(50);
 
-// Register frame rendered callback to function cb_frameRendered
-$ls->registerCallback(BrickletLEDStripV2::CALLBACK_FRAME_RENDERED, 'cb_frameRendered');
+// Register frame started callback to function cb_frameStarted
+$ls->registerCallback(BrickletLEDStripV2::CALLBACK_FRAME_STARTED, 'cb_frameStarted');
 
 echo "Press ctrl+c to exit\n";
 $ipcon->dispatchCallbacks(-1); // Dispatch callbacks forever

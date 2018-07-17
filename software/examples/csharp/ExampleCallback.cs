@@ -9,8 +9,8 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-	// Use frame rendered callback to move the active LED every frame
-	static void FrameRenderedCB(BrickletLEDStripV2 sender, int length)
+	// Use frame started callback to move the active LED every frame
+	static void FrameStartedCB(BrickletLEDStripV2 sender, int length)
 	{
 		Console.WriteLine("Length: " + length);
 	}
@@ -26,8 +26,8 @@ class Example
 		// Set frame duration to 50ms (20 frames per second)
 		ls.SetFrameDuration(50);
 
-		// Register frame rendered callback to function FrameRenderedCB
-		ls.FrameRenderedCallback += FrameRenderedCB;
+		// Register frame started callback to function FrameStartedCB
+		ls.FrameStartedCallback += FrameStartedCB;
 
 		Console.WriteLine("Press enter to exit");
 		Console.ReadLine();

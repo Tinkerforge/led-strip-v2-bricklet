@@ -49,9 +49,9 @@
                     }
                 );
 
-                // Register frame rendered callback
-                ls.on(Tinkerforge.BrickletLEDStripV2.CALLBACK_FRAME_RENDERED,
-                    // Use frame rendered callback to move the active LED every frame
+                // Register frame started callback
+                ls.on(Tinkerforge.BrickletLEDStripV2.CALLBACK_FRAME_STARTED,
+                    // Use frame started callback to move the active LED every frame
                     function (length) {
                         textArea.value += 'Length: ' + length + '\n';
                         textArea.scrollTop = textArea.scrollHeight;

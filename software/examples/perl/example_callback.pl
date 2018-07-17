@@ -10,8 +10,8 @@ use constant HOST => 'localhost';
 use constant PORT => 4223;
 use constant UID => 'XYZ'; # Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-# Use frame rendered callback to move the active LED every frame
-sub cb_frame_rendered
+# Use frame started callback to move the active LED every frame
+sub cb_frame_started
 {
     my ($length) = @_;
 
@@ -27,8 +27,8 @@ $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Set frame duration to 50ms (20 frames per second)
 $ls->set_frame_duration(50);
 
-# Register frame rendered callback to subroutine cb_frame_rendered
-$ls->register_callback($ls->CALLBACK_FRAME_RENDERED, 'cb_frame_rendered');
+# Register frame started callback to subroutine cb_frame_started
+$ls->register_callback($ls->CALLBACK_FRAME_STARTED, 'cb_frame_started');
 
 print "Press key to exit\n";
 <STDIN>;

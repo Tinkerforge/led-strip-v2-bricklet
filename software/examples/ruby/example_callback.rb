@@ -21,8 +21,8 @@ ipcon.connect HOST, PORT # Connect to brickd
 # Set frame duration to 50ms (20 frames per second)
 ls.set_frame_duration 50
 
-# Use frame rendered callback to move the active LED every frame
-ls.register_callback(BrickletLEDStripV2::CALLBACK_FRAME_RENDERED) do |length|
+# Use frame started callback to move the active LED every frame
+ls.register_callback(BrickletLEDStripV2::CALLBACK_FRAME_STARTED) do |length|
   puts "Length: #{length}"
 end
 

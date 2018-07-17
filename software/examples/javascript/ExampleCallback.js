@@ -23,9 +23,9 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     }
 );
 
-// Register frame rendered callback
-ls.on(Tinkerforge.BrickletLEDStripV2.CALLBACK_FRAME_RENDERED,
-    // Use frame rendered callback to move the active LED every frame
+// Register frame started callback
+ls.on(Tinkerforge.BrickletLEDStripV2.CALLBACK_FRAME_STARTED,
+    // Use frame started callback to move the active LED every frame
     function (length) {
         console.log('Length: ' + length);
     }

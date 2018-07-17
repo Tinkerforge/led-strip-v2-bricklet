@@ -14,7 +14,7 @@ type
     ipcon: TIPConnection;
     ls: TBrickletLEDStripV2;
   public
-    procedure FrameRenderedCB(sender: TBrickletLEDStripV2; const length: word);
+    procedure FrameStartedCB(sender: TBrickletLEDStripV2; const length: word);
     procedure Execute;
   end;
 
@@ -26,8 +26,8 @@ const
 var
   e: TExample;
 
-{ Use frame rendered callback to move the active LED every frame }
-procedure TExample.FrameRenderedCB(sender: TBrickletLEDStripV2; const length: word);
+{ Use frame started callback to move the active LED every frame }
+procedure TExample.FrameStartedCB(sender: TBrickletLEDStripV2; const length: word);
 begin
   WriteLn(Format('Length: %d', [length]));
 end;
@@ -47,8 +47,8 @@ begin
   { Set frame duration to 50ms (20 frames per second) }
   ls.SetFrameDuration(50);
 
-  { Register frame rendered callback to procedure FrameRenderedCB }
-  ls.OnFrameRendered := {$ifdef FPC}@{$endif}FrameRenderedCB;
+  { Register frame started callback to procedure FrameStartedCB }
+  ls.OnFrameStarted := {$ifdef FPC}@{$endif}FrameStartedCB;
 
   WriteLn('Press key to exit');
   ReadLn;
