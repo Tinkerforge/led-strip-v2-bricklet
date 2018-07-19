@@ -275,7 +275,7 @@ void led_measure_voltage(void) {
 
 		if((result & (1 << 31))) {
 			// Resistor divisor is 1k to 1k so we have to go from 0-4095 to 0-3.3V with a multiplier of (1+11)/1 = 11
-			// The multiplier of 12 has to be divided by 4 because auf the used data accumulation mode.
+			// The multiplier of 12 has to be divided by 4 because of the used data accumulation mode.
 			// 3300*11/(4095*4) = 605/273
 			led.voltage = (result & 0xFFFF)*605/273;
 		}
