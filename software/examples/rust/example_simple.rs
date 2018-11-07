@@ -1,6 +1,6 @@
 use std::{error::Error, io};
 
-use tinkerforge::{ipconnection::IpConnection, led_strip_v2_bricklet::*};
+use tinkerforge::{ip_connection::IpConnection, led_strip_v2_bricklet::*};
 
 // FIXME: This example is incomplete
 
@@ -10,10 +10,10 @@ const UID: &str = "XYZ"; // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
 fn main() -> Result<(), Box<dyn Error>> {
     let ipcon = IpConnection::new(); // Create IP connection
-    let led_strip_v2_bricklet = LEDStripV2Bricklet::new(UID, &ipcon); // Create device object
+    let led_strip_v2_bricklet = LedStripV2Bricklet::new(UID, &ipcon); // Create device object
 
-    ipcon.connect(HOST, PORT).recv()??; // Connect to brickd
-                                        // Don't use device before ipcon is connected
+    ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd
+                                          // Don't use device before ipcon is connected
 
     // TODO: Add example code here
 
