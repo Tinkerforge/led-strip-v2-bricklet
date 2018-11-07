@@ -17,9 +17,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Set frame duration to 50ms (20 frames per second)
     led_strip_v2_bricklet.set_frame_duration(50);
 
-    //Create receiver for frame started events.
-    let frame_started_receiver = led_strip_v2_bricklet.get_frame_started_receiver();
-    // Spawn thread to handle received events. This thread ends when the led_strip_v2_bricklet
+    let frame_started_receiver = led_strip_v2_bricklet.get_frame_started_callback_receiver();
+
+    // Spawn thread to handle received events.
+    // This thread ends when the `led_strip_v2_bricklet` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for event in frame_started_receiver {
