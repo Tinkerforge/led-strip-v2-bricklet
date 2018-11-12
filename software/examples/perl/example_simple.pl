@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# FIXME: This example is incomplete
-
 use strict;
 use Tinkerforge::IPConnection;
 use Tinkerforge::BrickletLEDStripV2;
@@ -16,7 +14,8 @@ my $ls = Tinkerforge::BrickletLEDStripV2->new(&UID, $ipcon); # Create device obj
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Don't use device before ipcon is connected
 
-# TODO: Add example code here
+# Set first 3 LEDs to red, green and blue
+$ls->set_led_values(0, [255, 0, 0, 0, 255, 0, 0, 0, 255]);
 
 print "Press key to exit\n";
 <STDIN>;

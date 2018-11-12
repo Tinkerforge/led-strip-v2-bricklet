@@ -1,7 +1,5 @@
 program ExampleSimple;
 
-{ FIXME: This example is incomplete }
-
 {$ifdef MSWINDOWS}{$apptype CONSOLE}{$endif}
 {$ifdef FPC}{$mode OBJFPC}{$H+}{$endif}
 
@@ -37,7 +35,8 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { TODO: Add example code here }
+  { Set first 3 LEDs to red, green and blue }
+  ls.SetLEDValues(0, [255, 0, 0, 0, 255, 0, 0, 0, 255]);
 
   WriteLn('Press key to exit');
   ReadLn;

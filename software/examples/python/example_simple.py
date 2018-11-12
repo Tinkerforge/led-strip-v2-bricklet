@@ -15,9 +15,8 @@ if __name__ == "__main__":
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
-    # Set first 10 LEDs to green (r = 0, g = 255, b = 0)
-    rgb = [0, 255, 0]*10
-    ls.set_led_values(0, rgb)
+    # Set first 3 LEDs to red, green and blue
+    ls.set_led_values(0, [255, 0, 0, 0, 255, 0, 0, 0, 255])
 
     raw_input("Press key to exit\n") # Use input() in Python 3
     ipcon.disconnect()

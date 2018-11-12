@@ -1,8 +1,6 @@
 Imports System
 Imports Tinkerforge
 
-' FIXME: This example is incomplete
-
 Module ExampleSimple
     Const HOST As String = "localhost"
     Const PORT As Integer = 4223
@@ -15,7 +13,8 @@ Module ExampleSimple
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' TODO: Add example code here
+        ' Set first 3 LEDs to red, green and blue
+        ls.SetLEDValues(0, new Byte(){255, 0, 0, 0, 255, 0, 0, 0, 255})
 
         Console.WriteLine("Press key to exit")
         Console.ReadLine()

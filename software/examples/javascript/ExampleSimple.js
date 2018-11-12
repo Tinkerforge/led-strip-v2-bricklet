@@ -1,7 +1,5 @@
 var Tinkerforge = require('tinkerforge');
 
-// FIXME: This example is incomplete
-
 var HOST = 'localhost';
 var PORT = 4223;
 var UID = 'XYZ'; // Change XYZ to the UID of your LED Strip Bricklet 2.0
@@ -18,7 +16,8 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function (connectReason) {
-        // TODO: Add example code here
+        // Set first 3 LEDs to red, green and blue
+        ls.setLEDValues(0, [255, 0, 0, 0, 255, 0, 0, 0, 255]);
     }
 );
 

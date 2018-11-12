@@ -1,8 +1,6 @@
 import com.tinkerforge.IPConnection;
 import com.tinkerforge.BrickletLEDStripV2;
 
-// FIXME: This example is incomplete
-
 public class ExampleSimple {
 	private static final String HOST = "localhost";
 	private static final int PORT = 4223;
@@ -19,7 +17,8 @@ public class ExampleSimple {
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// TODO: Add example code here
+		// Set first 3 LEDs to red, green and blue
+		ls.setLEDValues(0, new int[]{255, 0, 0, 0, 255, 0, 0, 0, 255});
 
 		System.out.println("Press key to exit"); System.in.read();
 		ipcon.disconnect();

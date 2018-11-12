@@ -1,7 +1,5 @@
 <?php
 
-// FIXME: This example is incomplete
-
 require_once('Tinkerforge/IPConnection.php');
 require_once('Tinkerforge/BrickletLEDStripV2.php');
 
@@ -18,7 +16,8 @@ $ls = new BrickletLEDStripV2(UID, $ipcon); // Create device object
 $ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected
 
-// TODO: Add example code here
+// Set first 3 LEDs to red, green and blue
+$ls->setLEDValues(0, array(255, 0, 0, 0, 255, 0, 0, 0, 255));
 
 echo "Press key to exit\n";
 fgetc(fopen('php://stdin', 'r'));

@@ -1,8 +1,6 @@
 using System;
 using Tinkerforge;
 
-// FIXME: This example is incomplete
-
 class Example
 {
 	private static string HOST = "localhost";
@@ -17,7 +15,8 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// TODO: Add example code here
+		// Set first 3 LEDs to red, green and blue
+		ls.SetLEDValues(0, new byte[]{255, 0, 0, 0, 255, 0, 0, 0, 255});
 
 		Console.WriteLine("Press enter to exit");
 		Console.ReadLine();

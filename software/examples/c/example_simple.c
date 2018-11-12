@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-// FIXME: This example is incomplete
-
 #include "ip_connection.h"
 #include "bricklet_led_strip_v2.h"
 
@@ -25,7 +23,8 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// TODO: Add example code here
+	// Set first 3 LEDs to red, green and blue
+	led_strip_v2_set_led_values(&ls, 0, (uint8_t[]){255, 0, 0, 0, 255, 0, 0, 0, 255});
 
 	printf("Press key to exit\n");
 	getchar();

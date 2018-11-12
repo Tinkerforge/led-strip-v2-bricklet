@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # -*- ruby encoding: utf-8 -*-
 
-# FIXME: This example is incomplete
-
 require 'tinkerforge/ip_connection'
 require 'tinkerforge/bricklet_led_strip_v2'
 
@@ -18,7 +16,8 @@ ls = BrickletLEDStripV2.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# TODO: Add example code here
+# Set first 3 LEDs to red, green and blue
+ls.set_led_values 0, [255, 0, 0, 0, 255, 0, 0, 0, 255]
 
 puts 'Press key to exit'
 $stdin.gets
