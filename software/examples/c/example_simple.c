@@ -24,7 +24,7 @@ int main(void) {
 	// Don't use device before ipcon is connected
 
 	// Set first 3 LEDs to red, green and blue
-	led_strip_v2_set_led_values(&ls, 0, (uint8_t[]){255, 0, 0, 0, 255, 0, 0, 0, 255});
+	led_strip_v2_set_led_values(&ls, 0, (uint8_t[]){255, 0, 0, 0, 255, 0, 0, 0, 255}, 9);
 
 	printf("Press key to exit\n");
 	getchar();
