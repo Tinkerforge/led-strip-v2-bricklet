@@ -1,0 +1,7 @@
+
+
+# Change XYZ to the UID of your LED Strip Bricklet 2.0
+
+setup:
+	# Set first 3 LEDs to red, green and blue
+	publish '{"index": 0, "value_length": [255,0,0,0,255,0,0,0,255]}' to tinkerforge/request/led_strip_v2_bricklet/XYZ/set_led_values 

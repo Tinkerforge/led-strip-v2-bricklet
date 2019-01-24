@@ -1,0 +1,11 @@
+
+
+# FIXME: This example is incomplete
+
+# Change XYZ to the UID of your LED Strip Bricklet 2.0
+
+setup:
+	# Set frame duration to 50ms (20 frames per second)
+	publish '{"duration": 50}' to tinkerforge/request/led_strip_v2_bricklet/XYZ/set_frame_duration 
+	# Use frame started callback to move the active LED every frame
+	subscribe to tinkerforge/callback/led_strip_v2_bricklet/XYZ/frame_started
