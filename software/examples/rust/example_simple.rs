@@ -14,7 +14,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected.
 
     // Set first 3 LEDs to red, green and blue
-    ls.set_led_values(0, &[255, 0, 0, 0, 255, 0, 0, 0, 255]);
+    ls.set_led_values(0, &[255, 0, 0, 0, 255, 0, 0, 0, 255])?;
 
     println!("Press enter to exit.");
     let mut _input = String::new();
