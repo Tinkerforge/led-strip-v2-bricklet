@@ -401,7 +401,6 @@ void led_init_adc(void) {
     XMC_VADC_GROUP_Init(VADC_G0, &group_init_handle0);
     XMC_VADC_GROUP_SetPowerMode(VADC_G0, XMC_VADC_GROUP_POWERMODE_NORMAL);
 
-    XMC_VADC_GLOBAL_DisablePostCalibration(VADC, 0);
     XMC_VADC_GLOBAL_SHS_EnableAcceleratedMode(SHS0, XMC_VADC_GROUP_INDEX_0);
     XMC_VADC_GLOBAL_SHS_SetAnalogReference(SHS0, XMC_VADC_GLOBAL_SHS_AREF_EXTERNAL_VDD_UPPER_RANGE);
 
