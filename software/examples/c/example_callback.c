@@ -38,7 +38,7 @@ int main(void) {
 	// Register frame started callback to function cb_frame_started
 	led_strip_v2_register_callback(&ls,
 	                               LED_STRIP_V2_CALLBACK_FRAME_STARTED,
-	                               (void *)cb_frame_started,
+	                               (void (*)(void))cb_frame_started,
 	                               NULL);
 
 	printf("Press key to exit\n");
