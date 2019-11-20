@@ -8,4 +8,5 @@
 - Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
 
 2019-11-20: 2.0.3 (abc5ee5)
-- Rewrite get_led_values. Fix streaming.
+- Fix set-led-values length check to allow setting the absolute last LED as well
+- Fix streaming logic of get-led-values for all chunks after the first one
