@@ -8,5 +8,5 @@
 - Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
 
 2019-11-20: 2.0.3 (abc5ee5)
-- Fix set-led-values length check to allow setting the absolute last LED as well
-- Fix streaming logic of get-led-values for all chunks after the first one
+- Fix set-led-values length check to allow setting the last (6143th) LED as well
+- Fix streaming logic of get-led-values for length above 60 LEDs
