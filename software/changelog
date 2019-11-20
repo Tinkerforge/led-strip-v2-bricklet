@@ -6,3 +6,6 @@
 
 2019-05-29: 2.0.2 (48aa043)
 - Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
+
+2019-11-20: 2.0.3 (<unknown>)
+- Rewrite get_led_values. Fix streaming.
