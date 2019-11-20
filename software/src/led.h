@@ -31,12 +31,11 @@
 typedef struct {
 	uint8_t buffer[LED_BUFFER_SIZE+100];
 	uint16_t buffer_index;
-	uint16_t buffer_index_max;
-	uint16_t buffer_index_max_irq;
-	uint16_t buffer_index_max_next;
+	uint16_t buffer_valid_length;
+	uint16_t buffer_valid_length_irq;
+	uint16_t buffer_valid_length_next;
 
 	uint8_t buffer_copy[LED_BUFFER_SIZE];
-	uint16_t buffer_copy_get_offset;
 
 	uint16_t frame_duration;
 	uint32_t clock_frequency;

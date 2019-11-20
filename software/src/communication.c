@@ -48,9 +48,9 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 
 
 BootloaderHandleMessageResponse set_led_values_low_level(const SetLEDValuesLowLevel *data) {
-	uint16_t leds_upto = data->index + data->value_length;
+	uint16_t leds_length = data->index + data->value_length;
 
-	if((leds_upto >= LED_BUFFER_SIZE) || (data->value_chunk_offset > data->value_length)) {
+	if((leds_length > LED_BUFFER_SIZE) || (data->value_chunk_offset > data->value_length)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
@@ -60,28 +60,30 @@ BootloaderHandleMessageResponse set_led_values_low_level(const SetLEDValuesLowLe
 
 	// End of stream.
 	if((length < 58) || ((data->value_chunk_offset + length) == data->value_length)) {
-		led.buffer_index_max_next = leds_upto;
+		led.buffer_valid_length_next = leds_length;
 	}
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse get_led_values_low_level(const GetLEDValuesLowLevel *data, GetLEDValuesLowLevel_Response *response) {
-	if(((data->index + data->length) >= LED_BUFFER_SIZE) || ((led.buffer_index_max - data->index) < led.buffer_copy_get_offset)) {
+	static uint16_t stream_chunk_offset = 0;
+
+	if(data->index + data->length > led.buffer_valid_length) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
-	
-	led.buffer_copy_get_offset = 0;
-	uint8_t length = MIN(MIN(60, led.buffer_index_max - data->index - led.buffer_copy_get_offset), data->length);
+
+	const uint16_t stream_cur_index = data->index + stream_chunk_offset;
+	const uint8_t chunk_length = MIN(MIN(60, led.buffer_valid_length - stream_cur_index), data->length);
 
 	response->header.length      = sizeof(GetLEDValuesLowLevel_Response);
-	response->value_chunk_offset = led.buffer_copy_get_offset;
-	response->value_length       = led.buffer_index_max;
-	memcpy(response->value_chunk_data, led.buffer_copy + led.buffer_copy_get_offset + data->index, length);
-	led.buffer_copy_get_offset += length;
+	response->value_chunk_offset = stream_chunk_offset;
+	response->value_length       = data->length;
+	memcpy(response->value_chunk_data, led.buffer_copy + stream_cur_index, chunk_length);
 
-	if(led.buffer_copy_get_offset >= (led.buffer_index_max - data->index)) {
-		led.buffer_copy_get_offset = 0;
+	stream_chunk_offset += chunk_length;
+	if(stream_chunk_offset >= data->length) {
+		stream_chunk_offset = 0;
 	}
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;

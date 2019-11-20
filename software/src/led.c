@@ -44,7 +44,7 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) le
 	while(!XMC_USIC_CH_TXFIFO_IsFull(LED_USIC)) {
 		LED_USIC->IN[0] = led.buffer[led.buffer_index];
 		led.buffer_index++;
-		if(led.buffer_index >= led.buffer_index_max_irq) {
+		if(led.buffer_index >= led.buffer_valid_length_irq) {
 			led.frame_sending = false;
 			XMC_USIC_CH_TXFIFO_DisableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
 			XMC_USIC_CH_TXFIFO_ClearEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
@@ -59,7 +59,7 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) le
 		LED_USIC->IN[0] = (ws281x_lut[value] >> 16) & 0xFFFF;
 		LED_USIC->IN[0] = ws281x_lut[value] & 0xFFFF;
 		led.buffer_index++;
-		if(led.buffer_index >= led.buffer_index_max_irq) {
+		if(led.buffer_index >= led.buffer_valid_length_irq) {
 			led.frame_sending = false;
 			XMC_USIC_CH_TXFIFO_DisableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
 			XMC_USIC_CH_TXFIFO_ClearEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
@@ -156,13 +156,13 @@ void led_buffer_copy_ldp8806(void) {
 		(led.mapping >> 0) & 0b11,
 	};
 
-	for(uint16_t i = 0; i < led.buffer_index_max_next; i += 3) {
+	for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 3) {
 		led.buffer[i]   = ~(led.buffer_copy[i+m[0]] / 2 + 128);
 		led.buffer[i+1] = ~(led.buffer_copy[i+m[1]] / 2 + 128);
 		led.buffer[i+2] = ~(led.buffer_copy[i+m[2]] / 2 + 128);
 	}
 
-	uint16_t end_of_data = MAX(led.buffer_index_max_next, led.buffer_index_max);
+	uint16_t end_of_data = MAX(led.buffer_valid_length_next, led.buffer_valid_length);
 
 	uint16_t latch_size = ((end_of_data / 3) + 31) / 32;
 	for(uint8_t j = 0; j < latch_size; j++) {
@@ -185,14 +185,14 @@ void led_buffer_copy_apa102(void) {
 	led.buffer[3] = 0xFF;
 
 
-	for(uint16_t i = 0; i < led.buffer_index_max_next; i += 4) {
+	for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 4) {
 		led.buffer[i+4]   = ~((led.buffer_copy[i+m[0]]/8) | 0b11100000);  // 3-bit "1" and 5-bit brightness
 		led.buffer[i+1+4] = ~led.buffer_copy[i+m[1]];
 		led.buffer[i+2+4] = ~led.buffer_copy[i+m[2]];
 		led.buffer[i+3+4] = ~(led.buffer_copy[i+m[3]]);
 	}
 
-	uint16_t end_of_data = MAX(led.buffer_index_max_next, led.buffer_index_max);
+	uint16_t end_of_data = MAX(led.buffer_valid_length_next, led.buffer_valid_length);
 
 	// The datasheet says that there have to be a 4-byte endframe with all bits
 	// set. But that create a fully white LED after the end of the configured
@@ -215,7 +215,7 @@ void led_buffer_copy_ws2801(void) {
 			(led.mapping >> 0) & 0b11,
 		};
 
-		for(uint16_t i = 0; i < led.buffer_index_max_next; i += 3) {
+		for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 3) {
 			led.buffer[i]   = ~led.buffer_copy[i+m[0]];
 			led.buffer[i+1] = ~led.buffer_copy[i+m[1]];
 			led.buffer[i+2] = ~led.buffer_copy[i+m[2]];
@@ -228,7 +228,7 @@ void led_buffer_copy_ws2801(void) {
 			(led.mapping >> 0) & 0b11,
 		};
 
-		for(uint16_t i = 0; i < led.buffer_index_max_next; i += 4) {
+		for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 4) {
 			led.buffer[i]   = ~led.buffer_copy[i+m[0]];
 			led.buffer[i+1] = ~led.buffer_copy[i+m[1]];
 			led.buffer[i+2] = ~led.buffer_copy[i+m[2]];
@@ -245,7 +245,7 @@ void led_buffer_copy_ws281x(void) {
 			(led.mapping >> 0) & 0b11,
 		};
 
-		for(uint16_t i = 0; i < led.buffer_index_max_next; i += 3) {
+		for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 3) {
 			led.buffer[i]   = led.buffer_copy[i+m[0]];
 			led.buffer[i+1] = led.buffer_copy[i+m[1]];
 			led.buffer[i+2] = led.buffer_copy[i+m[2]];
@@ -258,7 +258,7 @@ void led_buffer_copy_ws281x(void) {
 			(led.mapping >> 0) & 0b11,
 		};
 
-		for(uint16_t i = 0; i < led.buffer_index_max_next; i += 4) {
+		for(uint16_t i = 0; i < led.buffer_valid_length_next; i += 4) {
 			led.buffer[i]   = led.buffer_copy[i+m[0]];
 			led.buffer[i+1] = led.buffer_copy[i+m[1]];
 			led.buffer[i+2] = led.buffer_copy[i+m[2]];
@@ -431,7 +431,7 @@ void led_tick(void) {
 	led_measure_voltage();
 
 	if(!led.frame_sending) {
-		if(led.buffer_index_max_next != 0) {
+		if(led.buffer_valid_length_next != 0) {
 			switch(led.chip_type) {
 				case LED_STRIP_V2_CHIP_TYPE_WS2801:  led_buffer_copy_ws2801();  break;
 				case LED_STRIP_V2_CHIP_TYPE_WS2811:
@@ -440,18 +440,18 @@ void led_tick(void) {
 				case LED_STRIP_V2_CHIP_TYPE_APA102:  led_buffer_copy_apa102();  break;
 			}
 
-			if(led.buffer_index_max_next > led.buffer_index_max) {
-				led.buffer_index_max = led.buffer_index_max_next;
+			if(led.buffer_valid_length_next > led.buffer_valid_length) {
+				led.buffer_valid_length = led.buffer_valid_length_next;
 			}
 
-			led.buffer_index_max_irq = led.buffer_index_max;
+			led.buffer_valid_length_irq = led.buffer_valid_length;
 			if(led.chip_type == LED_STRIP_V2_CHIP_TYPE_APA102) {
-				led.buffer_index_max_irq += 8; // Add 8 bytes for pre/post fix of APA102 protocol
+				led.buffer_valid_length_irq += 8; // Add 8 bytes for pre/post fix of APA102 protocol
 			} else if(led.chip_type == LED_STRIP_V2_CHIP_TYPE_LPD8806) {
-				led.buffer_index_max_irq += ((led.buffer_index_max / 3) + 31) / 32; // Add latch bytes for LPD8806 protocol
+				led.buffer_valid_length_irq += ((led.buffer_valid_length / 3) + 31) / 32; // Add latch bytes for LPD8806 protocol
 			}
 
-			led.buffer_index_max_next = 0;
+			led.buffer_valid_length_next = 0;
 		}
 
 		if(system_timer_is_time_elapsed_ms(led.frame_start, led.frame_duration)) {
@@ -464,14 +464,14 @@ void led_tick(void) {
 				led.frame_start = system_timer_get_ms() - led.frame_duration;
 			}
 
-			if(led.buffer_index_max == 0) {
+			if(led.buffer_valid_length == 0) {
 				// There is no data available
 				return;
 			}
 
 			led.frame_sending = true;
 			led.buffer_index = 0;
-			led.frame_started_length = led.buffer_index_max;
+			led.frame_started_length = led.buffer_valid_length;
 
 			XMC_USIC_CH_TXFIFO_EnableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
 			switch(led.chip_type) {
