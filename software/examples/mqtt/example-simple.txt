@@ -2,4 +2,4 @@
 
 setup:
 	# Set first 3 LEDs to red, green and blue
-	publish '{"index": 0, "value": [255,0,0,0,255,0,0,0,255]}' to tinkerforge/request/led_strip_v2_bricklet/XYZ/set_led_values 
+	publish '{"index": 0, "value": [255,0,0,0,255,0,0,0,255]}' to tinkerforge/request/led_strip_v2_bricklet/XYZ/set_led_values
