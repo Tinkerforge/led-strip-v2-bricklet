@@ -7,3 +7,4 @@ setup:
 
 	# Use frame started callback to move the active LED every frame
 	subscribe to tinkerforge/callback/led_strip_v2_bricklet/XYZ/frame_started
+	publish '{"register": true}' to tinkerforge/register/led_strip_v2_bricklet/XYZ/frame_started # Register frame_started callback

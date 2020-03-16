@@ -24,7 +24,7 @@ func main() {
 	ls.SetFrameDuration(50)
 
 	ls.RegisterFrameStartedCallback(func(length uint16) {
-		fmt.Println("Length: ", length)
+		fmt.Printf("Length: %d\n", length)
 	})
 
 	fmt.Print("Press enter to exit.")
