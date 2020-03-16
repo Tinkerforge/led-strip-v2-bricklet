@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # Set frame duration to 50ms (20 frames per second)
     ls.set_frame_duration(50)
 
-    # Register frame rendered callback to function cb_frame_rendered
+    # Register frame started callback to function cb_frame_started
     ls.register_callback(ls.CALLBACK_FRAME_STARTED,
                          lambda x: cb_frame_started(x, ls))
 
