@@ -14,7 +14,7 @@ type
     ipcon: TIPConnection;
     ls: TBrickletLEDStripV2;
   public
-    procedure FrameStartedCB(sender: TBrickletLEDStripV2; const length: word);
+    procedure FrameStartedCB(sender: TBrickletLEDStripV2; const length_: word);
     procedure Execute;
   end;
 
@@ -27,9 +27,9 @@ var
   e: TExample;
 
 { Use frame started callback to move the active LED every frame }
-procedure TExample.FrameStartedCB(sender: TBrickletLEDStripV2; const length: word);
+procedure TExample.FrameStartedCB(sender: TBrickletLEDStripV2; const length_: word);
 begin
-  WriteLn(Format('Length: %d', [length]));
+  WriteLn(Format('Length: %d', [length_]));
 end;
 
 procedure TExample.Execute;
