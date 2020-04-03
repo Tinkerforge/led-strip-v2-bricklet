@@ -1,0 +1,31 @@
+import java.util.Collections
+
+val NUM_LEDS = 200
+var counter = 0
+
+rule "example"
+when
+    // System started has to be used as additional trigger to draw the first frame, the channel will only
+    // trigger once the first frame has been sent.
+    // Change XYZ to the UID of your LED Strip Bricklet 2.0
+    System started or Channel "tinkerforge:brickletledstripv2:XYZ:BrickletLEDStripV2FrameStarted" triggered
+then    
+    // Change XYZ to the UID of your LED Strip Bricklet 2.0
+    val ledActions = getActions("tinkerforge", "tinkerforge:brickletledstripv2:XYZ")
+    
+    counter = counter + 1
+    
+    //Clear all LEDs when at the end of the strip.
+    if (counter >= NUM_LEDS) {
+         ledActions.brickletLEDStripV2SetLEDValues(0, Collections.nCopies(600, 0))
+         counter = 0
+    }
+
+    // Draw pattern: black, red, green, blue, black
+    // If the colors are exchanged, the channel mapping is misconfigured
+    ledActions.brickletLEDStripV2SetLEDValues(counter * 3, newArrayList(0, 0, 0,
+                                                                        255, 0, 0,
+                                                                        0, 255, 0,
+                                                                        0, 0, 255,
+                                                                        0, 0, 0))
+end
