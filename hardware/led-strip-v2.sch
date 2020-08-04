@@ -1,5 +1,5 @@
 EESchema Schematic File Version 4
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -136,9 +136,9 @@ Wire Wire Line
 Wire Wire Line
 	9400 3850 9500 3850
 Wire Wire Line
-	9400 3350 9400 3850
+	9400 3350 9400 3650
 Wire Wire Line
-	9200 3650 10000 3650
+	9200 3650 9400 3650
 Wire Wire Line
 	10000 3650 10000 3850
 Wire Wire Line
@@ -148,9 +148,9 @@ Wire Wire Line
 Wire Wire Line
 	10050 3600 9500 3600
 Wire Wire Line
-	9500 3350 9500 3750
+	9500 3350 9500 3500
 Wire Wire Line
-	8650 3950 9500 3950
+	8650 3950 9400 3950
 Wire Wire Line
 	9400 3950 9400 4150
 Wire Wire Line
@@ -259,14 +259,14 @@ F 3 "" H 8000 2900 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7850 3050 8150 3050
+	7850 3050 7950 3050
 Wire Wire Line
-	8000 2900 8000 3050
+	8000 2900 8000 2950
 Connection ~ 8000 3050
 Connection ~ 8050 3050
 Connection ~ 7950 3050
 Wire Wire Line
-	8200 3800 8200 3450
+	8200 3800 8200 3750
 Wire Wire Line
 	8200 3450 8150 3450
 Wire Wire Line
@@ -276,11 +276,11 @@ Wire Wire Line
 Wire Wire Line
 	8200 4200 8200 4600
 Wire Wire Line
-	7800 3700 8650 3700
+	7800 3700 8400 3700
 Wire Wire Line
 	8650 3700 8650 3950
 Wire Wire Line
-	8200 3750 8600 3750
+	8200 3750 8550 3750
 Wire Wire Line
 	8600 3750 8600 4050
 Connection ~ 8200 3750
@@ -295,9 +295,9 @@ Wire Wire Line
 	8000 2950 8150 2950
 Connection ~ 8000 2950
 Wire Wire Line
-	9250 3350 9400 3350
+	9250 3350 9350 3350
 Wire Wire Line
-	9500 3350 9650 3350
+	9500 3350 9550 3350
 Wire Wire Line
 	9650 3350 9650 2850
 Wire Wire Line
@@ -455,7 +455,7 @@ L tinkerforge:FUSE F1
 U 1 1 559D721B
 P 8250 5100
 F 0 "F1" H 8350 5150 40  0000 C CNN
-F 1 "FUSE" H 8150 5050 40  0000 C CNN
+F 1 "0ZCJ0035FF2G" H 8300 4950 40  0000 C CNN
 F 2 "kicad-libraries:F1206" H 8250 5100 60  0001 C CNN
 F 3 "" H 8250 5100 60  0000 C CNN
 	1    8250 5100
@@ -507,7 +507,7 @@ Wire Wire Line
 Wire Wire Line
 	7800 4100 7800 4600
 Wire Wire Line
-	7800 4600 8550 4600
+	7800 4600 8200 4600
 Wire Wire Line
 	8250 4850 8250 4600
 Connection ~ 8250 4600
@@ -590,7 +590,7 @@ Wire Wire Line
 Wire Wire Line
 	1550 2050 1750 2050
 Wire Wire Line
-	1750 2150 1550 2150
+	1750 2150 1650 2150
 $Comp
 L tinkerforge:C C1
 U 1 1 5A589BBB
@@ -646,7 +646,7 @@ $EndComp
 Wire Wire Line
 	3300 3000 3200 3000
 Wire Wire Line
-	3200 2950 3200 3200
+	3200 2950 3200 3000
 Wire Wire Line
 	3300 3100 3200 3100
 Connection ~ 3200 3100
@@ -673,7 +673,7 @@ F 3 "" H 3200 2750 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3200 2350 3200 2550
+	3200 2350 3200 2500
 Wire Wire Line
 	3300 2500 3200 2500
 Connection ~ 3200 2500
@@ -890,4 +890,46 @@ NoConn ~ 3300 6500
 NoConn ~ 3300 6400
 NoConn ~ 3300 6300
 NoConn ~ 3300 6200
+Wire Wire Line
+	9500 3600 9500 3750
+Wire Wire Line
+	9400 3650 9400 3850
+Wire Wire Line
+	9400 3650 10000 3650
+Wire Wire Line
+	9500 3500 9500 3600
+Wire Wire Line
+	9400 3950 9500 3950
+Wire Wire Line
+	8000 3050 8050 3050
+Wire Wire Line
+	8050 3050 8150 3050
+Wire Wire Line
+	7950 3050 8000 3050
+Wire Wire Line
+	8200 3750 8200 3450
+Wire Wire Line
+	8000 2950 8000 3050
+Wire Wire Line
+	9550 3350 9650 3350
+Wire Wire Line
+	9350 3350 9400 3350
+Wire Wire Line
+	8400 3700 8650 3700
+Wire Wire Line
+	8550 3750 8600 3750
+Wire Wire Line
+	8250 4600 8400 4600
+Wire Wire Line
+	8400 4600 8550 4600
+Wire Wire Line
+	8200 4600 8250 4600
+Wire Wire Line
+	1650 2150 1550 2150
+Wire Wire Line
+	3200 3100 3200 3200
+Wire Wire Line
+	3200 2500 3200 2550
+Wire Wire Line
+	3200 3000 3200 3100
 $EndSCHEMATC
