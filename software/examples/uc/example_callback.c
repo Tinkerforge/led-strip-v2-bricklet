@@ -3,22 +3,25 @@
 
 #define UID "XYZ" // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
 void check(int rc, const char* msg);
 
 #define NUM_LEDS 16
 
-uint8_t rgb[NUM_LEDS * 3] = {0};
-uint16_t idx = 0;
+static uint8_t rgb[NUM_LEDS * 3] = {0};
+static uint16_t idx = 0;
 
-bool frame_started = false;
+static bool frame_started = false;
 // Use frame started callback to trigger drawing the next frame.
-void frame_started_handler(TF_LEDStripV2 *device, uint16_t length, void *user_data) {
+static void frame_started_handler(TF_LEDStripV2 *device, uint16_t length, void *user_data) {
 	(void)device; (void)length; (void)user_data; // avoid unused parameter warning
 
 	frame_started = true;
 }
 
-TF_LEDStripV2 ls;
+static TF_LEDStripV2 ls;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object

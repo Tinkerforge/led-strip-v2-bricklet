@@ -5,7 +5,11 @@
 
 void check(int rc, const char* msg);
 
-TF_LEDStripV2 ls;
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
+
+static TF_LEDStripV2 ls;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object
