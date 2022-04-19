@@ -7,8 +7,8 @@
 
 #define UID "XYZ" // Change XYZ to the UID of your LED Strip Bricklet 2.0
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 void check(int rc, const char* msg);
 
@@ -27,7 +27,7 @@ static void frame_started_handler(TF_LEDStripV2 *device, uint16_t length, void *
 
 static TF_LEDStripV2 ls;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_led_strip_v2_create(&ls, UID, hal), "create device object");
 
@@ -43,7 +43,7 @@ void example_setup(TF_HalContext *hal) {
 	tf_led_strip_v2_set_led_values(&ls, 0, rgb, NUM_LEDS * 3);
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	// Polling with 0 will process one packet at most, so we can't miss a frame.
 	tf_hal_callback_tick(hal, 0);
