@@ -1,16 +1,13 @@
 // This example is not self-contained.
-// It requres usage of the example driver specific to your platform.
+// It requires usage of the example driver specific to your platform.
 // See the HAL documentation.
 
-#include "bindings/hal_common.h"
-#include "bindings/bricklet_led_strip_v2.h"
+#include "src/bindings/hal_common.h"
+#include "src/bindings/bricklet_led_strip_v2.h"
 
-#define UID "XYZ" // Change XYZ to the UID of your LED Strip Bricklet 2.0
-
+void check(int rc, const char *msg);
 void example_setup(TF_HAL *hal);
 void example_loop(TF_HAL *hal);
-
-void check(int rc, const char* msg);
 
 #define NUM_LEDS 16
 
@@ -29,7 +26,7 @@ static TF_LEDStripV2 ls;
 
 void example_setup(TF_HAL *hal) {
 	// Create device object
-	check(tf_led_strip_v2_create(&ls, UID, hal), "create device object");
+	check(tf_led_strip_v2_create(&ls, NULL, hal), "create device object");
 
 	// Set frame duration to 50ms (20 frames per second)
 	check(tf_led_strip_v2_set_frame_duration(&ls, 50), "call set_frame_duration");
