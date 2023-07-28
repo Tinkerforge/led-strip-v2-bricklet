@@ -35,14 +35,43 @@
 
 #define led_tx_irq_handler_wo_clock IRQ_Hdlr_11
 #define led_tx_irq_handler_w_clock IRQ_Hdlr_12
+#define led_tx_irq_handler_wo_clock_inv IRQ_Hdlr_13
+#define led_tx_irq_handler_w_clock_inv IRQ_Hdlr_14
 
 extern uint32_t ws281x_lut[];
 LED led;
 
+void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) led_tx_irq_handler_w_clock_inv(void) {
+	while(!XMC_USIC_CH_TXFIFO_IsFull(LED_USIC)) {
+		LED_USIC->IN[0] = ~led.buffer[led.buffer_index];
+		led.buffer_index++;
+		if(led.buffer_index >= led.buffer_valid_length_irq) {
+			led.frame_sending = false;
+			XMC_USIC_CH_TXFIFO_DisableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+			XMC_USIC_CH_TXFIFO_ClearEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+			return;
+		}
+	}
+}
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) led_tx_irq_handler_w_clock(void) {
 	while(!XMC_USIC_CH_TXFIFO_IsFull(LED_USIC)) {
 		LED_USIC->IN[0] = led.buffer[led.buffer_index];
+		led.buffer_index++;
+		if(led.buffer_index >= led.buffer_valid_length_irq) {
+			led.frame_sending = false;
+			XMC_USIC_CH_TXFIFO_DisableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+			XMC_USIC_CH_TXFIFO_ClearEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
+			return;
+		}
+	}
+}
+
+void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) led_tx_irq_handler_wo_clock_inv(void) {
+	while(XMC_USIC_CH_TXFIFO_GetLevel(LED_USIC) < 30) {
+		const uint8_t value = led.buffer[led.buffer_index];
+		LED_USIC->IN[0] = (~(ws281x_lut[value] >> 16)) & 0xFFFF;
+		LED_USIC->IN[0] = (~ws281x_lut[value]) & 0xFFFF;
 		led.buffer_index++;
 		if(led.buffer_index >= led.buffer_valid_length_irq) {
 			led.frame_sending = false;
@@ -84,7 +113,12 @@ void led_update_baudrate(void) {
 	};
 
 	XMC_SPI_CH_Init(LED_USIC, &channel_config);
-	LED_USIC->SCTR &= ~USIC_CH_SCTR_PDL_Msk; // Set passive data level to 0
+	// Set passive data level to 0
+	if(led.inverted) {
+		LED_USIC->SCTR |= USIC_CH_SCTR_PDL_Msk;
+	} else {
+		LED_USIC->SCTR &= ~USIC_CH_SCTR_PDL_Msk;
+	}
 	XMC_SPI_CH_SetBitOrderMsbFirst(LED_USIC);
 
 	if((led.chip_type == LED_STRIP_V2_CHIP_TYPE_WS2811) || (led.chip_type == LED_STRIP_V2_CHIP_TYPE_WS2812)) {
@@ -97,9 +131,16 @@ void led_update_baudrate(void) {
 	XMC_SPI_CH_SetTransmitMode(LED_USIC, XMC_SPI_CH_MODE_STANDARD);
 
 	// Configure the clock polarity and clock delay
-	XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
-									     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
-									     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+	if(led.inverted) {
+		XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+	} else {
+		XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+
+	}
 	// Configure Leading/Trailing delay
 	XMC_SPI_CH_SetSlaveSelectDelay(LED_USIC, 2);
 
@@ -118,24 +159,55 @@ void led_update_chip_type(void) {
 		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD
 	};
 
-	switch(led.chip_type) {
-		case LED_STRIP_V2_CHIP_TYPE_WS2811:
-		case LED_STRIP_V2_CHIP_TYPE_WS2812: {
-			NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
-			XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_WO_CLOCK);
-			NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
-			XMC_GPIO_Init(LED_SCLK_PIN, &config_without_clock);
-			break;
-		}
-		case LED_STRIP_V2_CHIP_TYPE_WS2801:
-		case LED_STRIP_V2_CHIP_TYPE_LPD8806:
-		case LED_STRIP_V2_CHIP_TYPE_APA102: {
-			NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
-			XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_W_CLOCK);
-			NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
-			XMC_GPIO_Init(LED_SCLK_PIN, &config_with_clock);
+	if(led.inverted) {
+		switch(led.chip_type) {
+			case LED_STRIP_V2_CHIP_TYPE_WS2811:
+			case LED_STRIP_V2_CHIP_TYPE_WS2812: {
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_INV_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
+				XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_WO_INV_CLOCK);
+				NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_WO_INV_CLOCK);
+				XMC_GPIO_Init(LED_SCLK_PIN, &config_without_clock);
+				break;
+			}
+			case LED_STRIP_V2_CHIP_TYPE_WS2801:
+			case LED_STRIP_V2_CHIP_TYPE_LPD8806:
+			case LED_STRIP_V2_CHIP_TYPE_APA102: {
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_INV_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
+				XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_W_INV_CLOCK);
+				NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_W_INV_CLOCK);
+				XMC_GPIO_Init(LED_SCLK_PIN, &config_with_clock);
 
-			break;
+				break;
+			}
+		}
+	} else {
+		switch(led.chip_type) {
+			case LED_STRIP_V2_CHIP_TYPE_WS2811:
+			case LED_STRIP_V2_CHIP_TYPE_WS2812: {
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_INV_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_INV_CLOCK);
+				XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_WO_CLOCK);
+				NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
+				XMC_GPIO_Init(LED_SCLK_PIN, &config_without_clock);
+				break;
+			}
+			case LED_STRIP_V2_CHIP_TYPE_WS2801:
+			case LED_STRIP_V2_CHIP_TYPE_LPD8806:
+			case LED_STRIP_V2_CHIP_TYPE_APA102: {
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_WO_INV_CLOCK);
+				NVIC_DisableIRQ((IRQn_Type)LED_IRQ_TX_W_INV_CLOCK);
+				XMC_USIC_CH_TXFIFO_SetInterruptNodePointer(LED_USIC, XMC_USIC_CH_TXFIFO_INTERRUPT_NODE_POINTER_STANDARD, LED_SERVICE_REQUEST_W_CLOCK);
+				NVIC_EnableIRQ((IRQn_Type)LED_IRQ_TX_W_CLOCK);
+				XMC_GPIO_Init(LED_SCLK_PIN, &config_with_clock);
+
+				break;
+			}
 		}
 	}
 
@@ -474,16 +546,29 @@ void led_tick(void) {
 			led.frame_started_length = led.buffer_valid_length;
 
 			XMC_USIC_CH_TXFIFO_EnableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
-			switch(led.chip_type) {
-				case LED_STRIP_V2_CHIP_TYPE_WS2811:
-				case LED_STRIP_V2_CHIP_TYPE_WS2812: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_WO_CLOCK); break;
-				case LED_STRIP_V2_CHIP_TYPE_WS2801:
-				case LED_STRIP_V2_CHIP_TYPE_LPD8806:
-				case LED_STRIP_V2_CHIP_TYPE_APA102: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_W_CLOCK); break;
+			if(led.inverted) {
+				switch(led.chip_type) {
+					case LED_STRIP_V2_CHIP_TYPE_WS2811:
+					case LED_STRIP_V2_CHIP_TYPE_WS2812: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_WO_INV_CLOCK); break;
+					case LED_STRIP_V2_CHIP_TYPE_WS2801:
+					case LED_STRIP_V2_CHIP_TYPE_LPD8806:
+					case LED_STRIP_V2_CHIP_TYPE_APA102: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_W_INV_CLOCK); break;
+				}
+			} else {
+				switch(led.chip_type) {
+					case LED_STRIP_V2_CHIP_TYPE_WS2811:
+					case LED_STRIP_V2_CHIP_TYPE_WS2812: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_WO_CLOCK); break;
+					case LED_STRIP_V2_CHIP_TYPE_WS2801:
+					case LED_STRIP_V2_CHIP_TYPE_LPD8806:
+					case LED_STRIP_V2_CHIP_TYPE_APA102: XMC_USIC_CH_TriggerServiceRequest(LED_USIC, LED_SERVICE_REQUEST_W_CLOCK); break;
+				}
 			}
-
 		}
 	}
+}
+
+void led_update_inverted(void) {
+	led.inverted = !XMC_GPIO_GetInput(LED_VERSION_PIN);
 }
 
 void led_init(void) {
@@ -523,13 +608,27 @@ void led_init(void) {
 		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD
 	};
 
+	// Hardware version detection pin configuration
+	const XMC_GPIO_CONFIG_t version_pin_config = {
+		.mode             = XMC_GPIO_MODE_INPUT_PULL_UP,
+		.output_level     = XMC_GPIO_OUTPUT_LEVEL_HIGH,
+		.input_hysteresis = XMC_GPIO_INPUT_HYSTERESIS_STANDARD
+	};
 
 	// Configure GPIO pins
 	XMC_GPIO_Init(LED_VOLTAGE_PIN, &voltage_pin_config);
+	XMC_GPIO_Init(LED_VERSION_PIN, &version_pin_config);
 
 	// Initialize USIC channel in SPI master mode
 	XMC_SPI_CH_Init(LED_USIC, &channel_config);
-	LED_USIC->SCTR = ~USIC_CH_SCTR_PDL_Msk; // Set passive data level to 0
+
+	led_update_inverted();
+	// Set passive data level to 0
+	if(led.inverted) {
+		LED_USIC->SCTR = USIC_CH_SCTR_PDL_Msk;
+	} else {
+		LED_USIC->SCTR = ~USIC_CH_SCTR_PDL_Msk;
+	}
 
 	XMC_SPI_CH_SetBitOrderMsbFirst(LED_USIC);
 
@@ -539,9 +638,16 @@ void led_init(void) {
 	XMC_SPI_CH_SetTransmitMode(LED_USIC, XMC_SPI_CH_MODE_STANDARD);
 
 	// Configure the clock polarity and clock delay
-	XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
-									     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
-									     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+	if(led.inverted) {
+		XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_0_DELAY_ENABLED,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+	} else {
+		XMC_SPI_CH_ConfigureShiftClockOutput(LED_USIC,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_PASSIVE_LEVEL_1_DELAY_ENABLED,
+		                                     XMC_SPI_CH_BRG_SHIFT_CLOCK_OUTPUT_SCLK);
+
+	}
 	// Configure Leading/Trailing delay
 	XMC_SPI_CH_SetSlaveSelectDelay(LED_USIC, 2);
 
@@ -554,6 +660,8 @@ void led_init(void) {
 	//Set priority and enable NVIC node for transmit interrupt
 	NVIC_SetPriority(LED_IRQ_TX_WO_CLOCK, LED_IRQ_TX_PRIORITY);
 	NVIC_SetPriority(LED_IRQ_TX_W_CLOCK, LED_IRQ_TX_PRIORITY);
+	NVIC_SetPriority(LED_IRQ_TX_WO_INV_CLOCK, LED_IRQ_TX_PRIORITY);
+	NVIC_SetPriority(LED_IRQ_TX_W_INV_CLOCK, LED_IRQ_TX_PRIORITY);
 	NVIC_EnableIRQ(LED_IRQ_TX_W_CLOCK);
 
 	// Start SPI

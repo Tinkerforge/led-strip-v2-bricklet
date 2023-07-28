@@ -10,3 +10,6 @@
 2019-11-20: 2.0.3 (abc5ee5)
 - Fix set-led-values length check to allow setting the last (6143th) LED as well
 - Fix streaming logic of get-led-values for length above 60 LEDs
+
+2023-07-28: 2.0.4 (TBD)
+- Add support for hardware version 2.2

@@ -36,12 +36,18 @@
 
 #define LED_SERVICE_REQUEST_WO_CLOCK 2
 #define LED_SERVICE_REQUEST_W_CLOCK  3
+#define LED_SERVICE_REQUEST_WO_INV_CLOCK 4
+#define LED_SERVICE_REQUEST_W_INV_CLOCK  5
 
 #define LED_IRQ_TX_WO_CLOCK          11
 #define LED_IRQ_TX_W_CLOCK           12
+#define LED_IRQ_TX_WO_INV_CLOCK      13
+#define LED_IRQ_TX_W_INV_CLOCK       14
 #define LED_IRQ_TX_PRIORITY          3
 
 #define LED_VOLTAGE_PIN              P2_1
 #define LED_VOLTAGE_CHANNEL          6
+
+#define LED_VERSION_PIN              P2_11
 
 #endif

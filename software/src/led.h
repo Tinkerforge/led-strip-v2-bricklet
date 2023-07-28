@@ -49,6 +49,8 @@ typedef struct {
 
 	bool frame_sending;
 	bool frame_started_callback_enabled;
+
+	bool inverted;
 } LED;
 extern LED led;
 
