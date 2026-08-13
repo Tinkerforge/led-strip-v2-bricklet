@@ -526,14 +526,19 @@ void led_tick(void) {
 			led.buffer_valid_length_next = 0;
 		}
 
-		if(system_timer_is_time_elapsed_ms(led.frame_start, led.frame_duration)) {
-			led.frame_start += led.frame_duration;
+		if(led.manual_start || (led.frame_duration > 0 && system_timer_is_time_elapsed_ms(led.frame_start, led.frame_duration))) {
+			if(led.manual_start) {
+				led.manual_start = false;
+				led.frame_start = system_timer_get_ms();
+			} else {
+				led.frame_start += led.frame_duration;
 
-			// If the duration is smaller then possible to send, we make sure that
-			// the frame_start variable does not start to completely drift away
-			// from the current time.
-			if(system_timer_is_time_elapsed_ms(led.frame_start, led.frame_duration)) {
-				led.frame_start = system_timer_get_ms() - led.frame_duration;
+				// If the duration is smaller then possible to send, we make sure that
+				// the frame_start variable does not start to completely drift away
+				// from the current time.
+				if(system_timer_is_time_elapsed_ms(led.frame_start, led.frame_duration)) {
+					led.frame_start = system_timer_get_ms() - led.frame_duration;
+				}
 			}
 
 			if(led.buffer_valid_length == 0) {

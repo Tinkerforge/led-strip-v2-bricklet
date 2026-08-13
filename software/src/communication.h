@@ -104,6 +104,7 @@ void communication_init(void);
 #define FID_GET_CHANNEL_MAPPING 12
 #define FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION 13
 #define FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION 14
+#define FID_START_FRAME 15
 
 #define FID_CALLBACK_FRAME_STARTED 6
 
@@ -212,6 +213,10 @@ typedef struct {
 	bool enable;
 } __attribute__((__packed__)) GetFrameStartedCallbackConfiguration_Response;
 
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) StartFrame;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse set_led_values_low_level(const SetLEDValuesLowLevel *data);
@@ -227,6 +232,7 @@ BootloaderHandleMessageResponse set_channel_mapping(const SetChannelMapping *dat
 BootloaderHandleMessageResponse get_channel_mapping(const GetChannelMapping *data, GetChannelMapping_Response *response);
 BootloaderHandleMessageResponse set_frame_started_callback_configuration(const SetFrameStartedCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_frame_started_callback_configuration(const GetFrameStartedCallbackConfiguration *data, GetFrameStartedCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse start_frame(const StartFrame *data);
 
 // Callbacks
 bool handle_frame_started_callback(void);

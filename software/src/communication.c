@@ -43,6 +43,7 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_CHANNEL_MAPPING:                      return length != sizeof(GetChannelMapping)                    ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_channel_mapping(message, response);
 		case FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(SetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_frame_started_callback_configuration(message);
 		case FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(GetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_frame_started_callback_configuration(message, response);
+		case FID_START_FRAME:                              return length != sizeof(StartFrame)                           ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : start_frame(message);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -172,6 +173,12 @@ BootloaderHandleMessageResponse get_frame_started_callback_configuration(const G
 	response->enable        = led.frame_started_callback_enabled;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse start_frame(const StartFrame *data) {
+        led.manual_start = true;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 

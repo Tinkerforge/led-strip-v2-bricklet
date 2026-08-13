@@ -44,6 +44,7 @@ typedef struct {
 	uint16_t frame_started_length;
 
 	uint32_t frame_start;
+	bool manual_start;
 
 	uint16_t voltage;
 

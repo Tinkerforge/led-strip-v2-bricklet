@@ -13,3 +13,7 @@
 
 2023-07-28: 2.1.0 (7d7d544)
 - Add support for hardware version 2.2
+
+2026-08-14: 2.2.0 (TBD)
+- Add manual frame start API
+- A frame duration of zero will now disable automatic frame updates
