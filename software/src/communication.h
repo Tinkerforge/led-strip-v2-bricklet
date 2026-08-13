@@ -34,6 +34,7 @@ void communication_tick(void);
 void communication_init(void);
 
 // Constants
+
 #define LED_STRIP_V2_CHIP_TYPE_WS2801 2801
 #define LED_STRIP_V2_CHIP_TYPE_WS2811 2811
 #define LED_STRIP_V2_CHIP_TYPE_WS2812 2812
@@ -111,7 +112,7 @@ typedef struct {
 	uint16_t index;
 	uint16_t value_length;
 	uint16_t value_chunk_offset;
-	char value_chunk_data[58];
+	uint8_t value_chunk_data[58];
 } __attribute__((__packed__)) SetLEDValuesLowLevel;
 
 typedef struct {
@@ -124,7 +125,7 @@ typedef struct {
 	TFPMessageHeader header;
 	uint16_t value_length;
 	uint16_t value_chunk_offset;
-	char value_chunk_data[60];
+	uint8_t value_chunk_data[60];
 } __attribute__((__packed__)) GetLEDValuesLowLevel_Response;
 
 typedef struct {

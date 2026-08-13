@@ -28,20 +28,21 @@
 #include "led.h"
 
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
+	const uint8_t length = ((TFPMessageHeader*)message)->length;
 	switch(tfp_get_fid_from_message(message)) {
-		case FID_SET_LED_VALUES_LOW_LEVEL: return set_led_values_low_level(message);
-		case FID_GET_LED_VALUES_LOW_LEVEL: return get_led_values_low_level(message, response);
-		case FID_SET_FRAME_DURATION: return set_frame_duration(message);
-		case FID_GET_FRAME_DURATION: return get_frame_duration(message, response);
-		case FID_GET_SUPPLY_VOLTAGE: return get_supply_voltage(message, response);
-		case FID_SET_CLOCK_FREQUENCY: return set_clock_frequency(message);
-		case FID_GET_CLOCK_FREQUENCY: return get_clock_frequency(message, response);
-		case FID_SET_CHIP_TYPE: return set_chip_type(message);
-		case FID_GET_CHIP_TYPE: return get_chip_type(message, response);
-		case FID_SET_CHANNEL_MAPPING: return set_channel_mapping(message);
-		case FID_GET_CHANNEL_MAPPING: return get_channel_mapping(message, response);
-		case FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION: return set_frame_started_callback_configuration(message);
-		case FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION: return get_frame_started_callback_configuration(message, response);
+		case FID_SET_LED_VALUES_LOW_LEVEL:                 return length != sizeof(SetLEDValuesLowLevel)                 ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_led_values_low_level(message);
+		case FID_GET_LED_VALUES_LOW_LEVEL:                 return length != sizeof(GetLEDValuesLowLevel)                 ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_led_values_low_level(message, response);
+		case FID_SET_FRAME_DURATION:                       return length != sizeof(SetFrameDuration)                     ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_frame_duration(message);
+		case FID_GET_FRAME_DURATION:                       return length != sizeof(GetFrameDuration)                     ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_frame_duration(message, response);
+		case FID_GET_SUPPLY_VOLTAGE:                       return length != sizeof(GetSupplyVoltage)                     ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_supply_voltage(message, response);
+		case FID_SET_CLOCK_FREQUENCY:                      return length != sizeof(SetClockFrequency)                    ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_clock_frequency(message);
+		case FID_GET_CLOCK_FREQUENCY:                      return length != sizeof(GetClockFrequency)                    ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_clock_frequency(message, response);
+		case FID_SET_CHIP_TYPE:                            return length != sizeof(SetChipType)                          ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_chip_type(message);
+		case FID_GET_CHIP_TYPE:                            return length != sizeof(GetChipType)                          ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_chip_type(message, response);
+		case FID_SET_CHANNEL_MAPPING:                      return length != sizeof(SetChannelMapping)                    ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_channel_mapping(message);
+		case FID_GET_CHANNEL_MAPPING:                      return length != sizeof(GetChannelMapping)                    ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_channel_mapping(message, response);
+		case FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(SetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_frame_started_callback_configuration(message);
+		case FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(GetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_frame_started_callback_configuration(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
