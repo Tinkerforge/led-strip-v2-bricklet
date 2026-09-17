@@ -105,6 +105,9 @@ void communication_init(void);
 #define FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION 13
 #define FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION 14
 #define FID_START_FRAME 15
+#define FID_TRUNCATE_FRAME 16
+#define FID_SET_AUTO_TRUNCATE 17
+#define FID_GET_AUTO_TRUNCATE 18
 
 #define FID_CALLBACK_FRAME_STARTED 6
 
@@ -217,6 +220,25 @@ typedef struct {
 	TFPMessageHeader header;
 } __attribute__((__packed__)) StartFrame;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t length;
+} __attribute__((__packed__)) TruncateFrame;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t length;
+} __attribute__((__packed__)) SetAutoTruncate;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetAutoTruncate;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t length;
+} __attribute__((__packed__)) GetAutoTruncate_Response;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse set_led_values_low_level(const SetLEDValuesLowLevel *data);
@@ -233,6 +255,9 @@ BootloaderHandleMessageResponse get_channel_mapping(const GetChannelMapping *dat
 BootloaderHandleMessageResponse set_frame_started_callback_configuration(const SetFrameStartedCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_frame_started_callback_configuration(const GetFrameStartedCallbackConfiguration *data, GetFrameStartedCallbackConfiguration_Response *response);
 BootloaderHandleMessageResponse start_frame(const StartFrame *data);
+BootloaderHandleMessageResponse truncate_frame(const TruncateFrame *data);
+BootloaderHandleMessageResponse set_auto_truncate(const SetAutoTruncate *data);
+BootloaderHandleMessageResponse get_auto_truncate(const GetAutoTruncate *data, GetAutoTruncate_Response *response);
 
 // Callbacks
 bool handle_frame_started_callback(void);

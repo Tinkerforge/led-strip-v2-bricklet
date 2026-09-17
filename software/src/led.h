@@ -42,6 +42,7 @@ typedef struct {
 	uint16_t chip_type;
 	uint8_t mapping;
 	uint16_t frame_started_length;
+	uint16_t auto_truncate_length;
 
 	uint32_t frame_start;
 	bool manual_start;

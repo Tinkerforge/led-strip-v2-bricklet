@@ -550,6 +550,10 @@ void led_tick(void) {
 			led.buffer_index = 0;
 			led.frame_started_length = led.buffer_valid_length;
 
+			if (led.buffer_valid_length >= led.auto_truncate_length) {
+				led.buffer_valid_length = led.auto_truncate_length;
+			}
+
 			XMC_USIC_CH_TXFIFO_EnableEvent(LED_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
 			if(led.inverted) {
 				switch(led.chip_type) {
@@ -585,6 +589,7 @@ void led_init(void) {
 	led.chip_type       = LED_STRIP_V2_CHIP_TYPE_WS2801;
 	led.mapping         = LED_STRIP_V2_CHANNEL_MAPPING_BGR;
 	led.frame_started_callback_enabled = true;
+	led.auto_truncate_length = 6144;
 
 	// USIC channel configuration
 	const XMC_SPI_CH_CONFIG_t channel_config = {

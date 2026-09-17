@@ -30,7 +30,7 @@
 #define UARTBB_TX_PIN P2_10
 
 #define FIRMWARE_VERSION_MAJOR 2
-#define FIRMWARE_VERSION_MINOR 1
+#define FIRMWARE_VERSION_MINOR 3
 #define FIRMWARE_VERSION_REVISION 0
 
 #include "config_custom_bootloader.h"

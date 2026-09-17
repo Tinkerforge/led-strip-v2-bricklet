@@ -17,3 +17,6 @@
 2026-08-15: 2.2.0 (db5ae42)
 - Add manual frame start API
 - A frame duration of zero will now disable automatic frame updates
+
+2026-09-18: 2.3.0 (TBD)
+- Add frame truncation API

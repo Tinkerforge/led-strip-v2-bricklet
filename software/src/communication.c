@@ -44,6 +44,9 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(SetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_frame_started_callback_configuration(message);
 		case FID_GET_FRAME_STARTED_CALLBACK_CONFIGURATION: return length != sizeof(GetFrameStartedCallbackConfiguration) ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_frame_started_callback_configuration(message, response);
 		case FID_START_FRAME:                              return length != sizeof(StartFrame)                           ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : start_frame(message);
+		case FID_TRUNCATE_FRAME:                           return length != sizeof(TruncateFrame)                        ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : truncate_frame(message);
+		case FID_SET_AUTO_TRUNCATE:                        return length != sizeof(SetAutoTruncate)                      ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : set_auto_truncate(message);
+		case FID_GET_AUTO_TRUNCATE:                        return length != sizeof(GetAutoTruncate)                      ? HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER : get_auto_truncate(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -179,6 +182,27 @@ BootloaderHandleMessageResponse start_frame(const StartFrame *data) {
         led.manual_start = true;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse truncate_frame(const TruncateFrame *data) {
+	if (led.buffer_valid_length > data->length) {
+		led.buffer_valid_length = data->length;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse set_auto_truncate(const SetAutoTruncate *data) {
+	led.auto_truncate_length = data->length;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_auto_truncate(const GetAutoTruncate *data, GetAutoTruncate_Response *response) {
+	response->header.length = sizeof(GetAutoTruncate_Response);
+	response->length = led.auto_truncate_length;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
 
